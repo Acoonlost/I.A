@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT IA</title>
+    <style>
+        #chat-container {
+            height: 300px;
+            border: 1px solid #ccc;
+            overflow-y: scroll;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="chat-container"></div>
+<input type="text" id="user-input" placeholder="Digite sua mensagem">
+<button onclick="sendMessage()">Enviar</button>
+
+<script>
+    function sendMessage() {
+        var userInput = document.getElementById('user-input').value;
+        var chatContainer = document.getElementById('chat-container');
+
+        // Adapte a lógica abaixo conforme necessário
+        chatContainer.innerHTML += '<p><strong>Você:</strong> ' + userInput + '</p>';
+        chatContainer.innerHTML += '<p><strong>ChatGPT:</strong> Olá! Como posso ajudar?</p>';
+
+        // Limpa a entrada do usuário após enviar a mensagem
+        document.getElementById('user-input').value = '';
+    }
+</script>
+
+</body>
+</html>
