@@ -25,14 +25,17 @@
       return;
     }
 
-    // Realiza uma solicitação HTTP para a API do Wikipedia
-    fetch(`https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=${topic}&utf8=1`, {
+    // Substitua 'SUA_CHAVE_DE_API_AQUI' pela sua chave de API válida do Open Search
+    const apiKey = 'SUA_CHAVE_DE_API_AQUI';
+
+    // Realiza uma solicitação HTTP para a API do Open Search
+    fetch(`https://api.opensearch.org/v1/search?q=${topic}&api_key=${apiKey}`, {
       method: 'GET',
     })
       .then(response => response.json())
       .then(data => {
         // Extrai informações da resposta da API (ajuste conforme necessário)
-        const results = data.query.search.map(item => item.snippet);
+        const results = data.hits.hits.map(hit => hit._source.text);
 
         // Cria um novo PDF com jsPDF
         const pdf = new jsPDF();
