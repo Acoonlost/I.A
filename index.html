@@ -13,40 +13,43 @@
 <label for="topic">Tópico:</label>
 <input type="text" id="topic" placeholder="Digite o tópico">
 
-<label for="webUrl">URL da Página Web:</label>
-<input type="text" id="webUrl" placeholder="Digite a URL da página web">
-
 <button onclick="gerarApresentacao()">Gerar Apresentação</button>
 
 <script>
   function gerarApresentacao() {
     const topic = document.getElementById('topic').value;
-    const webUrl = document.getElementById('webUrl').value;
 
-    // Verifica se o tópico e a URL foram fornecidos
-    if (!topic || !webUrl) {
-      alert('Por favor, forneça um tópico e uma URL da web.');
+    // Verifica se o tópico foi fornecido
+    if (!topic) {
+      alert('Por favor, forneça um tópico.');
       return;
     }
 
-    // Realiza uma solicitação HTTP para obter informações da web (pode precisar de tratamento CORS)
-    fetch(webUrl)
-      .then(response => response.text())
-      .then(htmlContent => {
-        // Ajuste esta lógica conforme necessário para extrair informações específicas da página web
-        const extractedInfo = "Informações Extraídas da Web:\n" + htmlContent.substring(0, 100);
+    // Realiza uma solicitação HTTP para a API de pesquisa do Bing
+    fetch(`https://api.cognitive.microsoft.com/bing/v7.0/search?q=${topic}`, {
+      headers: {
+        'Ocp-Apim-Subscription-Key': 'SUA_CHAVE_DE_ASSINATURA_AQUI',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Extrai informações da resposta da API (ajuste conforme necessário)
+        const results = data.webPages.value.map(page => page.url);
 
         // Cria um novo PDF com jsPDF
         const pdf = new jsPDF();
         pdf.text(20, 20, `Tópico: ${topic}`);
-        pdf.text(20, 30, extractedInfo);
+        pdf.text(20, 30, 'Informações Obtidas Automaticamente:');
+        results.forEach((result, index) => {
+          pdf.text(20, 40 + index * 10, result);
+        });
 
         // Salva o PDF como um arquivo
         pdf.save(`${topic}_apresentacao.pdf`);
       })
       .catch(error => {
         console.error('Erro ao obter informações da web:', error);
-        alert('Erro ao obter informações da web. Verifique a URL e tente novamente.');
+        alert('Erro ao obter informações da web. Tente novamente mais tarde.');
       });
   }
 </script>
