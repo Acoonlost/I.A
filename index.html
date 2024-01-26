@@ -3,27 +3,51 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gerar PDF</title>
+  <title>Gerador de Apresentação em PDF</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 </head>
 <body>
 
-<button onclick="gerarPDF()">Gerar Apresentação</button>
+<h1>Gerador de Apresentação em PDF</h1>
+
+<label for="topic">Tópico:</label>
+<input type="text" id="topic" placeholder="Digite o tópico">
+
+<label for="webUrl">URL da Página Web:</label>
+<input type="text" id="webUrl" placeholder="Digite a URL da página web">
+
+<button onclick="gerarApresentacao()">Gerar Apresentação</button>
 
 <script>
-  function gerarPDF() {
-    // Simplesmente cria um PDF de exemplo usando jsPDF
-    const pdf = new jsPDF();
-    
-    // Adiciona um título
-    pdf.text("Apresentação Gerada", 20, 20);
+  function gerarApresentacao() {
+    const topic = document.getElementById('topic').value;
+    const webUrl = document.getElementById('webUrl').value;
 
-    // Adiciona informações retiradas da web (substitua isso pelo seu código real)
-    pdf.text("Tópico: Web Scraping", 20, 40);
-    pdf.text("Informação da Web: Este é um exemplo simples.", 20, 60);
+    // Verifica se o tópico e a URL foram fornecidos
+    if (!topic || !webUrl) {
+      alert('Por favor, forneça um tópico e uma URL da web.');
+      return;
+    }
 
-    // Salva o PDF
-    pdf.save("apresentacao.pdf");
+    // Realiza uma solicitação HTTP para obter informações da web (pode precisar de tratamento CORS)
+    fetch(webUrl)
+      .then(response => response.text())
+      .then(htmlContent => {
+        // Ajuste esta lógica conforme necessário para extrair informações específicas da página web
+        const extractedInfo = "Informações Extraídas da Web:\n" + htmlContent.substring(0, 100);
+
+        // Cria um novo PDF com jsPDF
+        const pdf = new jsPDF();
+        pdf.text(20, 20, `Tópico: ${topic}`);
+        pdf.text(20, 30, extractedInfo);
+
+        // Salva o PDF como um arquivo
+        pdf.save(`${topic}_apresentacao.pdf`);
+      })
+      .catch(error => {
+        console.error('Erro ao obter informações da web:', error);
+        alert('Erro ao obter informações da web. Verifique a URL e tente novamente.');
+      });
   }
 </script>
 
