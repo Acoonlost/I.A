@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Criador de Apresentações em PDF</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f0f0;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    header {
+      background-color: #007bff;
+      color: #fff;
+      padding: 1em;
+    }
+    section {
+      max-width: 800px;
+      margin: 2em auto;
+      padding: 2em;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    button {
+      background-color: #007bff;
+      color: #fff;
+      padding: 0.5em 1em;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Criador de Apresentações em PDF</h1>
+  </header>
+
+  <section>
+    <h2>Informe o assunto da apresentação</h2>
+    <input type="text" id="presentationTitle" placeholder="Assunto da Apresentação">
+    <br><br>
+    <h2>Insira o conteúdo abaixo</h2>
+    <textarea id="presentationContent" rows="10" cols="50"></textarea>
+    <br>
+    <button onclick="generatePDF()">Gerar PDF</button>
+  </
