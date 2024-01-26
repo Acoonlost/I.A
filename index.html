@@ -25,16 +25,14 @@
       return;
     }
 
-    // Realiza uma solicitação HTTP para a API de pesquisa do Bing
-    fetch(`https://api.cognitive.microsoft.com/bing/v7.0/search?q=${topic}`, {
-      headers: {
-        'Ocp-Apim-Subscription-Key': 'SUA_CHAVE_DE_ASSINATURA_AQUI',
-      },
+    // Realiza uma solicitação HTTP para a API do Wikipedia
+    fetch(`https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=${topic}&utf8=1`, {
+      method: 'GET',
     })
       .then(response => response.json())
       .then(data => {
         // Extrai informações da resposta da API (ajuste conforme necessário)
-        const results = data.webPages.value.map(page => page.url);
+        const results = data.query.search.map(item => item.snippet);
 
         // Cria um novo PDF com jsPDF
         const pdf = new jsPDF();
