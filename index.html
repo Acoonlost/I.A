@@ -3,36 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chatbot do Site</title>
+  <title>Gerar PDF</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 </head>
 <body>
 
-<!-- Adicione este script no final do corpo do seu HTML -->
-<script>
-  function interagirEGerarApresentacao() {
-    const topico = prompt('Digite o tópico da apresentação:');
-    const pergunta = prompt('Digite uma pergunta relacionada ao tópico:');
-    const urlWeb = prompt('Digite a URL da página web:');
+<button onclick="gerarPDF()">Gerar Apresentação</button>
 
-    // Envie a solicitação para o serviço Python
-    fetch('http://localhost:5000/gerar_apresentacao', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ topico, url_web: urlWeb, pergunta }),
-    })
-    .then(response => response.json())
-    .then(data => {
-      alert(data.mensagem);
-      console.log('Nome do arquivo PDF:', data.pdf_filename);
-      // Lógica adicional para manipular o arquivo PDF, se necessário
-    })
-    .catch(error => console.error('Erro:', error));
+<script>
+  function gerarPDF() {
+    // Simplesmente cria um PDF de exemplo usando jsPDF
+    const pdf = new jsPDF();
+    
+    // Adiciona um título
+    pdf.text("Apresentação Gerada", 20, 20);
+
+    // Adiciona informações retiradas da web (substitua isso pelo seu código real)
+    pdf.text("Tópico: Web Scraping", 20, 40);
+    pdf.text("Informação da Web: Este é um exemplo simples.", 20, 60);
+
+    // Salva o PDF
+    pdf.save("apresentacao.pdf");
   }
 </script>
-
-<button onclick="interagirEGerarApresentacao()">Iniciar Chatbot</button>
 
 </body>
 </html>
