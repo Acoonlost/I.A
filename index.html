@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apresentações Dinâmicas</title>
-  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <title>Apresentações Simples</title>
   <style>
     #presentation {
       max-width: 800px;
@@ -16,35 +15,39 @@
 
   <div id="presentation">
     <h1 id="topic">Tópico de apresentação</h1>
+    <input type="text" id="topicInput" placeholder="Digite o tópico">
+    <button onclick="generateSlide()">Gerar Slide</button>
     <div id="slide" style="border: 1px solid #ccc; padding: 10px;">
       <!-- Conteúdo da apresentação aqui -->
     </div>
-    <input type="text" id="topicInput" placeholder="Digite o tópico">
-    <button onclick="generatePresentation()">Gerar Apresentação</button>
   </div>
 
   <script>
-    function generatePresentation() {
+    function generateSlide() {
       const topicElement = document.getElementById("topic");
-      const slideElement = document.getElementById("slide");
       const topicInput = document.getElementById("topicInput").value;
+      const slideElement = document.getElementById("slide");
 
       // Atualiza o tópico
       topicElement.textContent = topicInput;
 
+      // Simulação de conteúdo dinâmico
+      const dynamicContent = `<p>Conteúdo dinâmico para ${topicInput}</p>`;
+
       // Atualiza o conteúdo do slide
-      slideElement.innerHTML = `<p>Conteúdo dinâmico para ${topicInput}</p>`;
+      slideElement.innerHTML = dynamicContent;
 
-      // Gera imagem do slide usando html2canvas
-      html2canvas(slideElement).then(canvas => {
-        const imageUrl = canvas.toDataURL(); // Obtém a imagem como base64
-        const imageElement = document.createElement("img");
-        imageElement.src = imageUrl;
+      // Converte o conteúdo do slide para uma imagem
+      const svgString = new XMLSerializer().serializeToString(slideElement);
+      const blob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+      const imageUrl = URL.createObjectURL(blob);
 
-        // Substitui o conteúdo do slide pela imagem gerada
-        slideElement.innerHTML = "";
-        slideElement.appendChild(imageElement);
-      });
+      const imageElement = document.createElement("img");
+      imageElement.src = imageUrl;
+
+      // Adiciona a imagem gerada ao slide
+      slideElement.innerHTML = "";
+      slideElement.appendChild(imageElement);
     }
   </script>
 
