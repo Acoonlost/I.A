@@ -3,62 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gerador de Apresentações</title>
-  <!-- Substitua "/caminho/para/" pelo caminho real no seu servidor -->
-  <script src="https://Acoonlost.github.io/I.A-Pdf/jspdf.umd.min.js"></script>
+  <title>Apresentações Dinâmicas</title>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <style>
+    #presentation {
+      max-width: 800px;
+      margin: auto;
+    }
+  </style>
 </head>
 <body>
 
-<h1>Gerador de Apresentações</h1>
+  <div id="presentation">
+    <h1 id="topic">Tópico de apresentação</h1>
+    <div id="slide" style="border: 1px solid #ccc; padding: 10px;">
+      <!-- Conteúdo da apresentação aqui -->
+    </div>
+    <input type="text" id="topicInput" placeholder="Digite o tópico">
+    <button onclick="generatePresentation()">Gerar Apresentação</button>
+  </div>
 
-<label for="topic">Tópico:</label>
-<input type="text" id="topic" placeholder="Digite o tópico">
+  <script>
+    function generatePresentation() {
+      const topicElement = document.getElementById("topic");
+      const slideElement = document.getElementById("slide");
+      const topicInput = document.getElementById("topicInput").value;
 
-<button onclick="gerarApresentacao('pdf')">Gerar PDF</button>
-<button onclick="gerarApresentacao('pptx')">Gerar PowerPoint</button>
+      // Atualiza o tópico
+      topicElement.textContent = topicInput;
 
-<script>
-  // Move a declaração do jsPDF para o escopo global
-  let pdf;
+      // Atualiza o conteúdo do slide
+      slideElement.innerHTML = `<p>Conteúdo dinâmico para ${topicInput}</p>`;
 
-  function gerarApresentacao(formato) {
-    const topic = document.getElementById('topic').value;
+      // Gera imagem do slide usando html2canvas
+      html2canvas(slideElement).then(canvas => {
+        const imageUrl = canvas.toDataURL(); // Obtém a imagem como base64
+        const imageElement = document.createElement("img");
+        imageElement.src = imageUrl;
 
-    // Verifica se o tópico foi fornecido
-    if (!topic) {
-      alert('Por favor, forneça um tópico.');
-      return;
-    }
-
-    // Realiza uma solicitação HTTP para a API do Wikipedia
-    fetch(`https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=${topic}&utf8=1&origin=*`)
-      .then(response => response.json())
-      .then(data => {
-        const content = data.query.search[0].snippet || 'Nenhuma informação disponível.';
-
-        if (formato === 'pdf') {
-          // Inicializa a instância do jsPDF dentro da condição
-          pdf = new jsPDF();
-
-          // Usa o pdf global para adicionar conteúdo ao PDF
-          pdf.text(20, 20, `Tópico: ${topic}`);
-          pdf.text(20, 30, 'Informações Obtidas Automaticamente:');
-          pdf.text(20, 40, content);
-
-          // Salva o PDF como um arquivo
-          pdf.save(`${topic}_apresentacao.pdf`);
-        } else if (formato === 'pptx') {
-          alert('Desculpe, a criação de PowerPoint no navegador não é suportada neste exemplo. Isso geralmente requer um servidor.');
-        } else {
-          alert('Formato não suportado.');
-        }
-      })
-      .catch(error => {
-        console.error('Erro ao obter informações da web:', error);
-        alert('Erro ao obter informações da web. Tente novamente mais tarde.');
+        // Substitui o conteúdo do slide pela imagem gerada
+        slideElement.innerHTML = "";
+        slideElement.appendChild(imageElement);
       });
-  }
-</script>
+    }
+  </script>
 
 </body>
 </html>
